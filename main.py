@@ -5,7 +5,7 @@ from fastapi.responses import FileResponse
 
 app = FastAPI()
 
-app.mount("/documents", StaticFiles(directory="documents", html = True), name="static")
+app.mount("/docs", StaticFiles(directory="docs", html = True), name="static")
 
 class SaveRequest(BaseModel):
     filename: str
@@ -13,7 +13,7 @@ class SaveRequest(BaseModel):
 
 @app.post("/save")
 def save(request: SaveRequest):
-    with open(f"documents/{request.filename}", "w") as fout:
+    with open(f"docs/{request.filename}", "w") as fout:
         fout.write(request.html)
 
 @app.get('/favicon.ico', include_in_schema=False)
