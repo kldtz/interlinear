@@ -5,7 +5,7 @@ from fastapi.responses import FileResponse
 
 app = FastAPI()
 
-app.mount("/docs", StaticFiles(directory="docs", html = True), name="static")
+app.mount("/documents", StaticFiles(directory="docs", html = True), name="static")
 
 class SaveRequest(BaseModel):
     filename: str

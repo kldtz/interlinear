@@ -2,7 +2,4 @@
 
 A simple tool for creating texts with interlinear annotations in the browser.
 
-
-```bash
-uvicorn main:app --reload
-```
+Run the server `uvicorn main:app --reload` and open `http://localhost:8000/documents/` in the browser.
