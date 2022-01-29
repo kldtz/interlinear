@@ -1,0 +1,21 @@
+html {
+    font-size: 18px;
+    overflow: auto;
+}
+
+body {
+    margin: 40px auto;
+    max-width: 800px;
+    line-height: 2;
+    color: #333;
+    padding: 0 10px;
+}
+
+ruby {
+    background-color: aliceblue;
+}
+
+rt {
+    background-color: aliceblue;
+    font-size: 12px;
+}
