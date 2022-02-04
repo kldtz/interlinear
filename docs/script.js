@@ -5,7 +5,7 @@ class AnnotationClient {
         document.onmouseup = this.mouseupHandler;
         // Add event listeners to RT elements
         for (let rt of document.getElementsByTagName("RT")) {
-            rt.addEventListener('blur', this.deleteEmptyAnnotation);
+            rt.addEventListener('blur', this.blurHandler);
             rt.addEventListener('keyup', this.enterAnnotation);
         }
     }
@@ -42,46 +42,45 @@ class AnnotationClient {
 
     deleteAnnotation(rt) {
         this.replaceRubyElement(rt);
+    }
+
+    blurHandler = (event) => {
+        const rt = event.target;
+        const annotation = rt.textContent.trim()
+        if (annotation.length === 0) {
+            this.deleteAnnotation(rt);
+        } else if (annotation == '?') {
+            rt.parentNode.className = "missing";
+        } else {
+            rt.parentNode.classList.remove("missing");
+        }
+
         this.saveDom().then(response => {
             if (response.status !== 200) {
                 throw response.statusText;
             }
         }).catch(err => {
             location.reload();
-            alert("Could not delete annotation!");
-        });;
-    }
-
-    deleteEmptyAnnotation = (event) => {
-        const rt = event.target;
-        if (rt.textContent.trim().length === 0) {
-            this.deleteAnnotation(rt);
-        }
+            console.log("Could not save changes!");
+        });
     }
 
     enterAnnotation = (event) => {
         if (event.keyCode === 13) {
             event.preventDefault();
             event.target.blur();
-            this.saveDom().then(response => {
-                if (response.status !== 200) {
-                    throw response.statusText;
-                }
-            }).catch(err => {
-                location.reload();
-                alert("Could not save changes!");
-            });
       }
     }
 
     createRubyElement = (selectionText) => {
         const ruby = document.createElement('ruby');
+        ruby.className = "missing";
         ruby.appendChild(document.createTextNode(selectionText));
         const rt = document.createElement('rt');
-        rt.textContent = 'Übersetzung';
+        rt.textContent = '?';
         rt.setAttribute('contenteditable', 'true');
         rt.setAttribute('spellcheck', 'false');
-        rt.addEventListener('blur', this.deleteEmptyAnnotation);
+        rt.addEventListener('blur', this.blurHandler);
         rt.addEventListener('keyup', this.enterAnnotation);
         ruby.appendChild(rt);
         return [ruby, rt];
@@ -111,6 +110,7 @@ class AnnotationClient {
             second.textContent = second.textContent.substring(selectionText.length);
             parent.insertBefore(ruby, second);
         }
+
         this.saveDom().then(response => {
             if (response.status !== 200) {
                 throw response.statusText;
@@ -119,7 +119,7 @@ class AnnotationClient {
             this.selectElementContents(rt);
         }).catch(err => {
             location.reload();
-            alert("Could not save annotation!");
+            console.log("Could not save annotation!");
         });
     };
 
@@ -133,16 +133,16 @@ class AnnotationClient {
             return;
         }
         if (selection.anchorNode !== selection.focusNode) {
-            alert("Cannot create annotation accross nodes!");
+            console.log("Cannot create annotation accross nodes!");
             return;
         }
         const node = selection.anchorNode;
         if (node.nodeType !== 3) {
-            alert("Cannot create annotation for non-text node!");
+            console.log("Cannot create annotation for non-text node!");
             return;
         }
         const offset = selection.anchorOffset;
-        const rt = this.createAnnotation(selectionText, offset, node);
+        this.createAnnotation(selectionText, offset, node);
     }
 }
 

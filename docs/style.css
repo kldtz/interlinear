@@ -15,6 +15,14 @@ ruby {
     background-color: aliceblue;
 }
 
+ruby.missing {
+    background-color: mistyrose;
+}
+
+ruby.missing rt {
+    background-color: mistyrose;
+}
+
 rt {
     background-color: aliceblue;
     font-size: 12px;
