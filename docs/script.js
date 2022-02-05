@@ -6,6 +6,7 @@ class AnnotationClient {
         // Add event listeners to RT elements
         for (let rt of document.getElementsByTagName("RT")) {
             rt.addEventListener('blur', this.blurHandler);
+            rt.addEventListener('keydown', this.preventNewline);
             rt.addEventListener('keyup', this.enterAnnotation);
         }
     }
@@ -46,13 +47,13 @@ class AnnotationClient {
 
     blurHandler = (event) => {
         const rt = event.target;
-        const annotation = rt.textContent.trim()
+        const annotation = rt.textContent.trim();
         if (annotation.length === 0) {
             this.deleteAnnotation(rt);
         } else if (annotation == '?') {
             rt.parentNode.className = "missing";
         } else {
-            rt.parentNode.classList.remove("missing");
+            rt.parentNode.removeAttribute("class");
         }
 
         this.saveDom().then(response => {
@@ -72,6 +73,12 @@ class AnnotationClient {
       }
     }
 
+    preventNewline = (event) => {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+        }
+    }
+
     createRubyElement = (selectionText) => {
         const ruby = document.createElement('ruby');
         ruby.className = "missing";
@@ -81,6 +88,7 @@ class AnnotationClient {
         rt.setAttribute('contenteditable', 'true');
         rt.setAttribute('spellcheck', 'false');
         rt.addEventListener('blur', this.blurHandler);
+        rt.addEventListener('keydown', this.preventNewline);
         rt.addEventListener('keyup', this.enterAnnotation);
         ruby.appendChild(rt);
         return [ruby, rt];
