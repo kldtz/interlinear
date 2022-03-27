@@ -136,8 +136,7 @@ class AnnotationClient {
             return;
         }
         const selection = document.getSelection();
-        const selectionText = selection.toString();
-        if (!selectionText || selection.anchorNode.parentNode.nodeName === 'RUBY' || selection.anchorNode.parentNode.nodeName === 'RT') {
+        if (!selection.toString() || selection.anchorNode.parentNode.nodeName === 'RUBY' || selection.anchorNode.parentNode.nodeName === 'RT') {
             return;
         }
         if (selection.anchorNode !== selection.focusNode) {
@@ -149,8 +148,12 @@ class AnnotationClient {
             console.log("Cannot create annotation for non-text node!");
             return;
         }
-        const offset = selection.anchorOffset;
-        this.createAnnotation(selectionText, offset, node);
+        const startOffset = selection.anchorOffset;
+        const endOffset = selection.getRangeAt(0).endOffset;
+        // Get proper selection text (selection.toString() ignores stuff that is not displayed 
+        // and thus cannot be used for offset calculations)
+        const selectionText = node.textContent.substring(startOffset, endOffset);
+        this.createAnnotation(selectionText, startOffset, node);
     }
 }
 
