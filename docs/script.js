@@ -14,7 +14,7 @@ class AnnotationClient {
     saveDom = () => {
         const html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
         const url = window.location.pathname;
-        const filename = url.substring(url.lastIndexOf('/')+1);
+        const filename = url.substring(url.lastIndexOf(this.opts.staticUrl)+this.opts.staticUrl.length);
         return fetch(this.opts.url, {
             method: "POST",
             headers: {"Content-Type": "application/json" },
@@ -158,5 +158,6 @@ class AnnotationClient {
 }
 
 const annotationClient = new AnnotationClient({
-    url: "/save"
+    url: "/save",
+    staticUrl: "documents/",
 });
