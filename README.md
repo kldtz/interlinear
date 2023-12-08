@@ -11,4 +11,6 @@ pip install -r requirements.txt
 python -m uvicorn main:app --reload
 ```
 
-Open `http://localhost:8000/documents/` in the browser.
+Open `http://localhost:8000/documents/` in the browser. 
+Press `Ctrl` and select some text to create a new annotation.
+Click into an existing annotation and edit or delete the text.
