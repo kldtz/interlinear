@@ -2,6 +2,8 @@
 
 A simple tool for creating texts with interlinear annotations in the browser.
 
+My texts: https://languages.verzettelung.com/index.html
+
 ```sh
 # Install dependencies
 pip install -r requirements.txt
